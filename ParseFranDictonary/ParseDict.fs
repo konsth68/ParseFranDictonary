@@ -87,11 +87,12 @@ module ParseDict =
 
     let replaceRegex = Regex ("^(.*?)\|")
     
+    
     let ClearParagraph (str:string) :string =
-        let s1 = str.Replace("\n\r","")
-        let s2 = s1.Replace("\r\n","")
-        let s3 = s2.Replace("\n","")
-        let s4 = s3.Replace("\r","")
+        let s1 = str.Replace("\n\r"," ")
+        let s2 = s1.Replace("\r\n"," ")
+        let s3 = s2.Replace("\n"," ")
+        let s4 = s3.Replace("\r"," ")        
         s4
 
     let GetWord (str:string) :string option =
@@ -199,10 +200,19 @@ module ParseDict =
         Seq.map (fun (x :FullDictPar) ->  (SaveWordKeyDb x.Word) ) fds
     
     // paragraph to db
+    
+            
+    
+    let ReplaceTilda (str :string) =
+        let s = str.Replace("∼","&Tilde;")
+        s
+        
     let escapeSymbolInParagraph (par :string) =
         let s1 = par.Replace(":","&colon;")
         let s2 = s1.Replace("?","&quest;")
-        s2
+        let s3 = s2.Replace("∼","&Tilde;");
+        let s4 = s3.Replace("|","")  
+        s4
         
     let createParagraph (dp: DictPar) (wKey :int64) =
         let pr :Paragraph =
@@ -211,11 +221,13 @@ module ParseDict =
                 WordKeyId = wKey
                 Word = dp.Word
                 Index = dp.Index
-                Paragraph = dp.Paragraph |> escapeSymbolInParagraph
+                ParagraphStr = dp.Paragraph |> escapeSymbolInParagraph
                 ReplaceStr = dp.ReplaceStr
             }
         pr
-            
+    
+    //let replaceTildaInParagraph (par :Paragraph)        
+    
     
     let createParagraphWordSeq (par :FullDictPar) (wKey :int64) :Paragraph seq =
           seq {

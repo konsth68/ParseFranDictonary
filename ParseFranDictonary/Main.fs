@@ -42,6 +42,7 @@ module Main =
         let smString = Option.get sqOp
         
         (*
+        
         WriteStrToFile (desktop+"\\fr_t1.txt") smString
         
         let fd = FillDict smString
@@ -50,6 +51,12 @@ module Main =
         
         *)
         
+        
+        //let s = ReplaceTilda "багет;1;<p><strong>I баге́т</strong> <em>m</em> baguette <em>f (de bois)</em>;лепно́й &lt;фигу́рный&gt; ∼ moulure <em>f</em> ~</p>"
+        //printfn $"{s}"
+        
+        
+        // for test tilde ------------------------------------------------------------------------
         let fds = smString
                             |> FillDict
                             |> CreateFullDictSeq
@@ -57,16 +64,24 @@ module Main =
         let resWorkKey = SaveWordKeysDb fds
         
         for rw in resWorkKey do
-            if(rw.Res.IsNone) then
+            if( rw.Res.IsNone ) then
                 printfn $"None -- {rw.Word}"
                 wr.WriteLine($"None -- {rw.Word}")
-                
+            else
+               printfn $"{rw.Res} -- {rw.Word}"
+        
+        
         let resPar = saveParagraphToDatabase fds
         
         for rp in resPar do
-            if(rp.Res.IsNone) then
+            if( rp.Res.IsNone ) then
                 printfn $"None -- {rp.Word} -- {rp.Index}"
                 wr.WriteLine($"None -- {rp.Word} -- {rp.Index}")
+            else
+                printfn $"{rp.Res} -- {rp.Word} -- {rp.Index}"
+        
+        
+        
         
         printfn "__END__"
         

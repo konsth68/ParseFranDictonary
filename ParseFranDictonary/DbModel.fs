@@ -9,7 +9,7 @@ type Paragraph =
         WordKeyId   :int64 
         Word        :string
         Index       :int
-        Paragraph   :string
+        ParagraphStr   :string
         ReplaceStr     :string
     }
 
@@ -25,11 +25,11 @@ module DbModel =
 
     //paragraph--------------------------------------------------------------------------------------------------
     
-    let parInsertStrSql (data :Paragraph) = $"INSERT INTO Paragraph ( WordKeyId,Word,IndexPar,Paragraph,ReplaceStr ) values ( \
+    let parInsertStrSql (data :Paragraph) = $"INSERT INTO Paragraph ( WordKeyId,Word,IndexPar,ParagraphStr,ReplaceStr ) values ( \
                                                     {data.WordKeyId} ,\
                                                     \'{data.Word}\' ,\
                                                     {data.Index} ,\
-                                                    \'{data.Paragraph}\',\
+                                                    \'{data.ParagraphStr}\',\
                                                     \'{data.ReplaceStr}\' )\
                                                     "
 
@@ -37,7 +37,7 @@ module DbModel =
                                                WordKeyId = {data.WordKeyId} ,
                                                Word = \'{data.Word}\' ,
                                                IndexPar = {data.Index} ,
-                                               Paragraph = \'{data.Paragraph}\' ,
+                                               ParagraphStr = \'{data.ParagraphStr}\' ,
                                                ReplaceStr = \'{data.ReplaceStr}\'
                                                WHERE 
                                                ParagraphId = {data.ParagraphId}    
@@ -46,13 +46,13 @@ module DbModel =
                                                 WHERE ParagraphId = {data.ParagraphId}
                                                 "
     let parGetAllStrSql =
-        "SELECT ParagraphId,WordKeyId,Word,IndexPar,Paragraph FROM Paragraph"
+        "SELECT ParagraphId,WordKeyId,Word,IndexPar,ParagraphStr FROM Paragraph"
     
     let parGetIdStrSql (id :int64) :string =
-        $"SELECT ParagraphId,WordKeyId,Word,IndexPar,Paragraph FROM Paragraph WHERE ParagraphId = {id} "
+        $"SELECT ParagraphId,WordKeyId,Word,IndexPar,ParagraphStr FROM Paragraph WHERE ParagraphId = {id} "
     
     let parGetFilterStrSql (filter :string) :string =
-        $"SELECT ParagraphId,WordKeyId,Word,IndexPar,Paragraph FROM Paragraph WHERE  {filter} "
+        $"SELECT ParagraphId,WordKeyId,Word,IndexPar,ParagraphStr FROM Paragraph WHERE  {filter} "
     
     let getAllPar () =
         let sql = parGetAllStrSql
