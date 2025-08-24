@@ -10,7 +10,8 @@ type Paragraph =
         Word        :string
         Index       :int
         ParagraphStr   :string
-        ReplaceStr     :string
+        ReplacePartStr  :string
+        ReplaceWordStr  :string
     }
 
 [<CLIMutable>]
@@ -25,20 +26,22 @@ module DbModel =
 
     //paragraph--------------------------------------------------------------------------------------------------
     
-    let parInsertStrSql (data :Paragraph) = $"INSERT INTO Paragraph ( WordKeyId,Word,IndexPar,ParagraphStr,ReplaceStr ) values ( \
+    let parInsertStrSql (data :Paragraph) = $"INSERT INTO Paragraph ( WordKeyId,Word,IndexPar,ParagraphStr,ReplacePartStr,ReplaceWordStr ) values ( \
                                                     {data.WordKeyId} ,\
                                                     \'{data.Word}\' ,\
                                                     {data.Index} ,\
                                                     \'{data.ParagraphStr}\',\
-                                                    \'{data.ReplaceStr}\' )\
-                                                    "
+                                                    \'{data.ReplacePartStr}\',\
+                                                    \'{data.ReplaceWordStr}\' )"                        
+                                                    
 
     let parUpdateStrSql (data :Paragraph) :string = $"UPDATE Paragraph SET
                                                WordKeyId = {data.WordKeyId} ,
                                                Word = \'{data.Word}\' ,
                                                IndexPar = {data.Index} ,
                                                ParagraphStr = \'{data.ParagraphStr}\' ,
-                                               ReplaceStr = \'{data.ReplaceStr}\'
+                                               ReplacePartStr = \'{data.ReplacePartStr}\',
+                                               ReplaceWordStr = \'{data.ReplaceWordStr}\'
                                                WHERE 
                                                ParagraphId = {data.ParagraphId}    
                                                "

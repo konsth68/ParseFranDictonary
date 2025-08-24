@@ -10,7 +10,8 @@ type DictPar =
         Word :string
         Index :int
         Paragraph :string
-        ReplaceStr :string
+        ReplacePartStr :string
+        ReplaceWordStr :string
     }
 
 type FullDictPar =
@@ -73,6 +74,7 @@ module ParseDict =
         wr <- wr.Replace("I","")
         wr <- wr.Replace("V","")
         wr <- wr.Replace("X","")
+        wr <- wr.ToLower()
         wr <- wr.Trim()
         wr   
 
@@ -87,6 +89,7 @@ module ParseDict =
 
     let replaceRegex = Regex ("^(.*?)\|")
     
+    let charStartRegexp = Regex("<p><strong>\\w\\w</strong></p>")
     
     let ClearParagraph (str:string) :string =
         let s1 = str.Replace("\n\r"," ")
@@ -109,13 +112,15 @@ module ParseDict =
          let s4 = s3.Trim()
          s4
             
-    let getReplaceStr (word :string) =        
+    let getReplacePartStr (word :string) =        
         let mt = replaceRegex.Match word
         if mt.Success = true then
             mt.Groups[1].Value |> clearLatNum
         else
             word |> clearLatNum
-    
+
+    let getReplaceWordStr (word :string) =        
+        word |> clearLatNum
     
     let GetParagraph (str:string) =
         let mtc = pRegexp.Matches str
@@ -141,7 +146,8 @@ module ParseDict =
                 Index = GetIndex word
                 Word = word |> ClearWorld accented no_accented
                 Paragraph = par
-                ReplaceStr = getReplaceStr word 
+                ReplacePartStr = getReplacePartStr word
+                ReplaceWordStr = getReplaceWordStr word
             }
         vc
     
@@ -161,8 +167,12 @@ module ParseDict =
             }
         fdp
     
+    let filterNnParagraph (par :DictPar) =
+        not (charStartRegexp.IsMatch par.Paragraph)
+            
     let CreateFullDictSeq (par :DictPar seq)  :FullDictPar seq =
         par
+        |> Seq.filter filterNnParagraph
         |> Seq.groupBy (fun x -> x.Word)
         |> Seq.map (fun x  -> CreateFullDictItem (fst x) (snd x) )                
                
@@ -222,7 +232,8 @@ module ParseDict =
                 Word = dp.Word
                 Index = dp.Index
                 ParagraphStr = dp.Paragraph |> escapeSymbolInParagraph
-                ReplaceStr = dp.ReplaceStr
+                ReplacePartStr = dp.ReplacePartStr
+                ReplaceWordStr = dp.ReplaceWordStr
             }
         pr
     
@@ -245,7 +256,6 @@ module ParseDict =
                 Index = par.Index
             }
         rr
-    
     
     let fillDict (dict :Dictionary<string,int64>) (word :string) (id :int64) =
         dict.Add(word,id)
