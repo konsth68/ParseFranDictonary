@@ -221,7 +221,7 @@ module ParseDict =
         let s1 = par.Replace(":","&colon;")
         let s2 = s1.Replace("?","&quest;")
         let s3 = s2.Replace("∼","&Tilde;");
-        let s4 = s3.Replace("|","")  
+        let s4 = s3.Replace("|","")         
         s4
         
     let createParagraph (dp: DictPar) (wKey :int64) =
