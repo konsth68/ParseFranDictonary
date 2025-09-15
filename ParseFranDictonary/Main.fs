@@ -29,7 +29,8 @@ module Main =
 
         let desktop = Environment.GetFolderPath (Environment.SpecialFolder.Desktop)
 
-        let srcFile = desktop + "\\all-aug20.html"  //"\\all.html"
+        //let srcFile = desktop + "\\all-aug20.html"  //"\\all.html"
+        let srcFile = desktop + "\\all-sep15.html"  //"\\all.html"
         
         let franDictString = System.IO.File.ReadAllText srcFile
         

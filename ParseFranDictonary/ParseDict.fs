@@ -87,9 +87,11 @@ module ParseDict =
 
     let strongRegexp = Regex("<p><strong(|\s+[^>]*)>(.*?)<\/strong\s*>",RegexOptions.Singleline)
 
-    let replaceRegex = Regex ("^(.*?)\|")
+    let replaceVerticalLineInReplaceWordRegex = Regex ("^(.*?)\|")
     
     let charStartRegexp = Regex("<p><strong>\\w\\w</strong></p>")
+    
+    let oneVerticalLineReplace = Regex("(\w|\s)(\|)(\s|\w)")
     
     let ClearParagraph (str:string) :string =
         let s1 = str.Replace("\n\r"," ")
@@ -113,7 +115,7 @@ module ParseDict =
          s4
             
     let getReplacePartStr (word :string) =        
-        let mt = replaceRegex.Match word
+        let mt = replaceVerticalLineInReplaceWordRegex.Match word
         if mt.Success = true then
             mt.Groups[1].Value |> clearLatNum
         else
@@ -216,12 +218,20 @@ module ParseDict =
     let ReplaceTilda (str :string) =
         let s = str.Replace("∼","&Tilde;")
         s
+    
+    let replaceVertLineInParagraph (par :string) =
+        oneVerticalLineReplace.Replace(par,(fun (m :Match) ->
+                                            let g1 = m.Groups[1].Value
+                                            let g2 = m.Groups[2].Value.Replace("|","")              
+                                            let g3 = m.Groups[3].Value                                                          
+                                            sprintf $"{g1}{g2}{g3}"
+                                                          ))
         
     let escapeSymbolInParagraph (par :string) =
         let s1 = par.Replace(":","&colon;")
         let s2 = s1.Replace("?","&quest;")
         let s3 = s2.Replace("∼","&Tilde;");
-        let s4 = s3.Replace("|","")         
+        let s4 = replaceVertLineInParagraph s3//s3.Replace("|","")         
         s4
         
     let createParagraph (dp: DictPar) (wKey :int64) =
