@@ -70,6 +70,7 @@ module ParseDict =
         let mutable wr = word
         for i in [0..16] do
             wr <- wr.Replace(ina[i],oua[i])
+        wr <- wr.Replace("Ё","Е").Replace("ё","е")
         wr <- wr.Replace("|","")  
         wr <- wr.Replace("I","")
         wr <- wr.Replace("V","")
